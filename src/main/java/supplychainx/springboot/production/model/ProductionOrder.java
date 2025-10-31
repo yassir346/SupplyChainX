@@ -17,6 +17,7 @@ public class ProductionOrder {
     @Id
     private Long id;
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
     private int quantity;
     @Enumerated(EnumType.STRING)

@@ -2,6 +2,7 @@ package supplychainx.springboot.supply.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import supplychainx.springboot.production.model.BillOfMaterial;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @ToString
 public class RawMaterial {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private int stock;
@@ -17,6 +19,6 @@ public class RawMaterial {
     private String unit;
     @OneToMany(mappedBy = "rawMaterial")
     private List<SupplyOrderRawMaterial> supplyOrderRawMaterials;
-    @ManyToMany
-    private List<Supplier> suppliers;
+    @OneToMany(mappedBy = "rawMaterial")
+    private List<BillOfMaterial> billOfMaterialList;
 }

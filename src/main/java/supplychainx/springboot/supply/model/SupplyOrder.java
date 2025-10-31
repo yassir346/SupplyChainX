@@ -12,12 +12,14 @@ import java.util.List;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString
 public class SupplyOrder {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate orderDate;
     @Enumerated(EnumType.STRING)
     private SupplyOrderStatus status;
     @ManyToOne
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
-    @OneToMany(mappedBy = "supplyOrder")
-    private List<SupplyOrderRawMaterial> supplyOrderRawMaterial;
+    @OneToMany(mappedBy = "supplyOrder", cascade = CascadeType.ALL)
+    private List<SupplyOrderRawMaterial> supplyOrderRawMaterialList;
 }

@@ -19,10 +19,13 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
     @ManyToOne
+    @JoinColumn(name = "address_id")
     private Address address;
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Delivery delivery;

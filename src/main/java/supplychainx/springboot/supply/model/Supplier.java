@@ -10,6 +10,7 @@ import java.util.List;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @ToString
 public class Supplier {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     @Column(unique = true)
