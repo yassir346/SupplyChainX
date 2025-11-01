@@ -33,7 +33,7 @@ public class RawMaterialController {
 
     @PutMapping("/{id}")
     public ResponseEntity<RawMaterial> update(@PathVariable Long id, @RequestBody RawMaterial rawMaterial){
-        return ResponseEntity.ok(rawMaterialService.save(rawMaterial));
+        return ResponseEntity.ok(rawMaterialService.update(id, rawMaterial));
     }
 
     @DeleteMapping("/{id}")
