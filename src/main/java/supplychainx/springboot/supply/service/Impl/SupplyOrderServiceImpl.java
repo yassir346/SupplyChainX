@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import supplychainx.springboot.common.enums.SupplyOrderStatus;
 import supplychainx.springboot.supply.dto.SupplyOrderRequestDTO;
-import supplychainx.springboot.supply.dto.SupplyRequestDTO;
+import supplychainx.springboot.supply.dto.SupplyOrderResponseDTO;
 import supplychainx.springboot.supply.model.RawMaterial;
 import supplychainx.springboot.supply.model.Supplier;
 import supplychainx.springboot.supply.model.SupplyOrder;
@@ -90,5 +90,36 @@ public class SupplyOrderServiceImpl implements ISupplyOrderService {
     @Override
     public List<SupplyOrder> getAllSupplyOrders() {
         return supplyOrderRepository.findAll();
+    }
+
+    @Override
+    public SupplyOrderResponseDTO toResponse(SupplyOrder supplyOrder){
+        SupplyOrderResponseDTO dto = new SupplyOrderResponseDTO();
+        dto.setId(supplyOrder.getId());
+        dto.setDate(supplyOrder.getOrderDate());
+        dto.setStatus(supplyOrder.getStatus().name());
+
+        SupplyOrderResponseDTO.SupplierResponse supplierResponse = new SupplyOrderResponseDTO.SupplierResponse();
+        supplierResponse.setId(supplyOrder.getSupplier().getId());
+        supplierResponse.setName(supplyOrder.getSupplier().getName());
+        supplierResponse.setContact(supplyOrder.getSupplier().getContact());
+        supplierResponse.setRating(supplyOrder.getSupplier().getRating());
+        dto.setSupplier(supplierResponse);
+
+        List<SupplyOrderResponseDTO.RawMaterialResponse> rawMaterialResponseList = supplyOrder.getSupplyOrderRawMaterialList().stream()
+                .map(srm -> {
+                    SupplyOrderResponseDTO.RawMaterialResponse r = new SupplyOrderResponseDTO.RawMaterialResponse();
+                    r.setId(srm.getRawMaterial().getId());
+                    r.setName(srm.getRawMaterial().getName());
+                    r.setQuantity(srm.getQuantity());
+                    return r;
+                })
+                .toList();
+        dto.setRawMaterialResponseList(rawMaterialResponseList);
+        return dto;
+    }
+
+    public List<SupplyOrderResponseDTO> toResponseList(List<SupplyOrder> supplyOrders){
+        return supplyOrders.stream().map(this::toResponse).toList();
     }
 }
