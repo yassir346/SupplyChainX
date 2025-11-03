@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import supplychainx.springboot.common.enums.SupplyOrderStatus;
 import supplychainx.springboot.supply.dto.SupplyOrderRequestDTO;
+import supplychainx.springboot.supply.dto.SupplyRequestDTO;
 import supplychainx.springboot.supply.model.RawMaterial;
 import supplychainx.springboot.supply.model.Supplier;
 import supplychainx.springboot.supply.model.SupplyOrder;
@@ -56,8 +57,18 @@ public class SupplyOrderServiceImpl implements ISupplyOrderService {
     }
 
     @Override
-    public SupplyOrder update(Long id, SupplyOrder supplyOrder) {
-        return null;
+    public SupplyOrder update(Long id, SupplyOrderRequestDTO supplyOrderRequest) {
+        SupplyOrder foundSupplyOrder = supplyOrderRepository.findById(id).orElseThrow();
+        foundSupplyOrder.setOrderDate(supplyOrderRequest.getOrderDate());
+        foundSupplyOrder.setStatus(SupplyOrderStatus.valueOf(supplyOrderRequest.getStatus()));
+        if(SupplyOrderStatus.valueOf(supplyOrderRequest.getStatus()).equals(SupplyOrderStatus.RECUE)){
+            for(SupplyOrderRawMaterial rmq : foundSupplyOrder.getSupplyOrderRawMaterialList()){
+                RawMaterial rawMaterial = rmq.getRawMaterial();
+                rawMaterial.setStock(rawMaterial.getStock() + rmq.getQuantity());
+            }
+        }
+        supplyOrderRepository.save(foundSupplyOrder);
+        return foundSupplyOrder;
     }
 
     @Override
