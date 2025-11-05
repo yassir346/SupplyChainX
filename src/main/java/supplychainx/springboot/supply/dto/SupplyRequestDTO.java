@@ -11,6 +11,11 @@ public class SupplyRequestDTO {
     private String name;
     private String contact;
     private double rating;
-    private List<RawMaterial> rawMaterialList;
+    private List<RawMaterialRequest> rawMaterialList;
+
+    @Getter @Setter
+    public static class RawMaterialRequest{
+        private Long RawMaterialId;
+    }
 
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import supplychainx.springboot.supply.dto.RawMaterialRequestDto;
 import supplychainx.springboot.supply.model.RawMaterial;
 import supplychainx.springboot.supply.service.IRawMaterialService;
 
@@ -17,8 +18,8 @@ public class RawMaterialController {
     IRawMaterialService rawMaterialService;
 
     @PostMapping("/add")
-    public ResponseEntity<RawMaterial> create(@RequestBody RawMaterial rawMaterial){
-        return ResponseEntity.status(HttpStatus.CREATED).body(rawMaterialService.save(rawMaterial));
+    public ResponseEntity<RawMaterial> create(@RequestBody RawMaterialRequestDto rawMaterialRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(rawMaterialService.save(rawMaterialRequest));
     }
 
     @GetMapping("/{id}")
@@ -37,8 +38,8 @@ public class RawMaterialController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable RawMaterial rawMaterial){
-        rawMaterialService.delete(rawMaterial);
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        rawMaterialService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

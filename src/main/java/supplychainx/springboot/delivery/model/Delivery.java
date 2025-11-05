@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @ToString
 public class Delivery {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
     private Order order;

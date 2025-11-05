@@ -3,6 +3,8 @@ package supplychainx.springboot.production.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class ProductResponseDto {
@@ -11,6 +13,7 @@ public class ProductResponseDto {
     private int productionTime;
     private double cost;
     private int stock;
+    private List<BillOfMaterialResponse> billOfMaterialResponseList;
 
     @Getter @Setter
     public static class BillOfMaterialResponse{

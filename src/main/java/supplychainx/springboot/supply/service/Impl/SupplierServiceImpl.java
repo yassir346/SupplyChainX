@@ -1,9 +1,13 @@
 package supplychainx.springboot.supply.service.Impl;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import supplychainx.springboot.supply.dto.SupplyRequestDTO;
+import supplychainx.springboot.supply.model.RawMaterial;
 import supplychainx.springboot.supply.model.Supplier;
+import supplychainx.springboot.supply.repository.IRawMaterialRepository;
 import supplychainx.springboot.supply.repository.ISupplierRepository;
 import supplychainx.springboot.supply.service.ISupplierService;
 
@@ -11,15 +15,23 @@ import java.util.List;
 
 @Transactional
 @Service
+@AllArgsConstructor
 public class SupplierServiceImpl implements ISupplierService {
-    @Autowired
     ISupplierRepository supplierRepository;
+    IRawMaterialRepository rawMaterialRepository;
 
     @Override
-    public Supplier save(Supplier supplier){
-        if(supplier == null){
-            System.out.println("invalid Supplier Object");
-        }
+    public Supplier save(SupplyRequestDTO supplyRequest){
+        Supplier supplier = new Supplier();
+        List<RawMaterial> rawMaterialList = supplyRequest.getRawMaterialList().stream()
+                        .map(rawMaterialRequest -> {
+                            RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialRequest.getRawMaterialId()).orElseThrow();
+                            return rawMaterial;
+                        }).toList();
+        supplier.setRawMaterials(rawMaterialList);
+        supplier.setName(supplyRequest.getName());
+        supplier.setRating(supplyRequest.getRating());
+        supplier.setContact(supplyRequest.getContact());
         supplierRepository.save(supplier);
         return supplier;
     }

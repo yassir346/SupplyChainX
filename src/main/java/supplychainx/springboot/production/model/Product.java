@@ -1,9 +1,6 @@
 package supplychainx.springboot.production.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import supplychainx.springboot.delivery.model.Order;
 
@@ -14,6 +11,7 @@ import java.util.List;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @ToString
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private int productionTime;

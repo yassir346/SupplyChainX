@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import supplychainx.springboot.supply.dto.SupplyRequestDTO;
 import supplychainx.springboot.supply.model.Supplier;
 import supplychainx.springboot.supply.service.Impl.SupplierServiceImpl;
-import supplychainx.springboot.supply.service.SupplierMapper;
 
 import java.util.List;
 
@@ -19,8 +18,7 @@ public class SupplierController {
 
     @PostMapping ("/add")
     public ResponseEntity<Supplier> create(@RequestBody SupplyRequestDTO supplierDTO){
-        Supplier supplier = SupplierMapper.toEntity(supplierDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(supplierService.save(supplier));
+        return ResponseEntity.status(HttpStatus.CREATED).body(supplierService.save(supplierDTO));
     }
 
     @GetMapping("/{id}")

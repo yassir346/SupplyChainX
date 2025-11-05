@@ -3,6 +3,7 @@ package supplychainx.springboot.supply.service.Impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import supplychainx.springboot.supply.dto.RawMaterialRequestDto;
 import supplychainx.springboot.supply.model.RawMaterial;
 import supplychainx.springboot.supply.repository.IRawMaterialRepository;
 import supplychainx.springboot.supply.service.IRawMaterialService;
@@ -16,10 +17,12 @@ public class RawMaterialServiceImpl implements IRawMaterialService {
     IRawMaterialRepository rawMaterialRepository;
 
     @Override
-    public RawMaterial save(RawMaterial rawMaterial) {
-        if(rawMaterial == null){
-            System.out.println("the rawMaterial Object must not be null");
-        }
+    public RawMaterial save(RawMaterialRequestDto rawMaterialRequest) {
+        RawMaterial rawMaterial = new RawMaterial();
+        rawMaterial.setName(rawMaterialRequest.getName());
+        rawMaterial.setStock(rawMaterialRequest.getStock());
+        rawMaterial.setStockMin(rawMaterialRequest.getStockMin());
+        rawMaterial.setUnit(rawMaterialRequest.getUnit());
         return rawMaterialRepository.save(rawMaterial);
     }
 
@@ -38,8 +41,8 @@ public class RawMaterialServiceImpl implements IRawMaterialService {
     }
 
     @Override
-    public void delete(RawMaterial rawMaterial) {
-        rawMaterialRepository.delete(rawMaterial);
+    public void delete(Long id) {
+        rawMaterialRepository.deleteById(id);
     }
 
     @Override

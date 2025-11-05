@@ -13,6 +13,7 @@ import supplychainx.springboot.supply.model.RawMaterial;
 @ToString
 public class BillOfMaterial {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "product_id")
