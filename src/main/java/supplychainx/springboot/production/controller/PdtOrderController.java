@@ -15,7 +15,8 @@ import supplychainx.springboot.production.service.IPdtOrderService;
 @RequestMapping("/production_order")
 @AllArgsConstructor
 public class PdtOrderController {
-    IPdtOrderService pdtOrderService;
+
+    private final IPdtOrderService pdtOrderService;
 
     @PostMapping("/add")
     public ResponseEntity<PdtOrderResponse> create(@RequestBody PdtOrderRequest pdtOrderRequest){

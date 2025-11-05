@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import supplychainx.springboot.common.enums.ProductionOrderStatus;
-import supplychainx.springboot.production.controller.PdtOrderController;
-import supplychainx.springboot.production.controller.ProductController;
 import supplychainx.springboot.production.dto.PdtOrderRequest;
 import supplychainx.springboot.production.dto.PdtOrderResponse;
 import supplychainx.springboot.production.mapper.ProductionOrderMapper;
@@ -48,22 +46,45 @@ public class PdtOrderServiceImpl implements IPdtOrderService {
 
     @Override
     public PdtOrderResponse update(PdtOrderRequest pdtOrderRequest, Long id) {
-        return null;
+        validateProduct(pdtOrderRequest);
+        ProductionOrder foundProductionOrder = pdtOrderReposetory.findById(id).orElseThrow();
+
+        Product validatedProduct = validateProduct(pdtOrderRequest);
+
+        if(!foundProductionOrder.getProduct().getId().equals(validatedProduct.getId()) || foundProductionOrder.getQuantity() != pdtOrderRequest.getQuantity()){
+
+            restoreOldBillOfMaterials(foundProductionOrder);
+            setNewBillOfMaterials(pdtOrderRequest, validatedProduct);
+            foundProductionOrder.setProduct(validatedProduct);
+            foundProductionOrder.setQuantity(pdtOrderRequest.getQuantity());
+        }
+        foundProductionOrder.setStartDate(pdtOrderRequest.getStartDate());
+        foundProductionOrder.setEndDate(pdtOrderRequest.getEndDate());
+        foundProductionOrder.setStatus(ProductionOrderStatus.valueOf(pdtOrderRequest.getStatus()));
+
+        ProductionOrder updatedPdtOrder = pdtOrderReposetory.save(foundProductionOrder);
+        return productionOrderMapper.mapToResponse(updatedPdtOrder);
     }
 
     @Override
     public PdtOrderResponse findById(Long id) {
-        return null;
+        ProductionOrder foundProductionOrder = pdtOrderReposetory.findById(id).orElseThrow();
+        return productionOrderMapper.mapToResponse(foundProductionOrder);
     }
 
     @Override
-    public List<Product> findAllProducts() {
+    public List<ProductionOrder> findAllProducts() {
         return List.of();
     }
 
     @Override
     public void delete(Long id) {
-
+        ProductionOrder foundProductionOrder = pdtOrderReposetory.findById(id).orElseThrow();
+        if (foundProductionOrder.getStatus() == ProductionOrderStatus.TERMINE || foundProductionOrder.getStatus() == ProductionOrderStatus.EN_PRODUCTION){
+            throw new IllegalStateException("Cannot delete a production order that is already in progress or completed");
+        }
+        restoreOldBillOfMaterials(foundProductionOrder);
+        pdtOrderReposetory.delete(foundProductionOrder);
     }
 
 
@@ -112,5 +133,13 @@ public class PdtOrderServiceImpl implements IPdtOrderService {
         }
     }
 
-
+    private void restoreOldBillOfMaterials(ProductionOrder productionOrder){
+        List<BillOfMaterial> bomList = productionOrder.getProduct().getBillOfMaterials();
+        for(BillOfMaterial bom : bomList){
+            RawMaterial rawMaterial = bom.getRawMaterial();
+            int quantityToRestore = bom.getQuantity() * productionOrder.getQuantity();
+            rawMaterial.setStock(rawMaterial.getStock() + quantityToRestore);
+            rawMaterialRepository.save(rawMaterial);
+        }
+    }
 }
