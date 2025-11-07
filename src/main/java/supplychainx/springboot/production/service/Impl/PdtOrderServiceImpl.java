@@ -73,8 +73,8 @@ public class PdtOrderServiceImpl implements IPdtOrderService {
     }
 
     @Override
-    public List<ProductionOrder> findAllProducts() {
-        return List.of();
+    public List<PdtOrderResponse> findAllProductionOrders() {
+        return pdtOrderReposetory.findAll().stream().map(productionOrderMapper::mapToResponse).toList();
     }
 
     @Override
@@ -85,6 +85,20 @@ public class PdtOrderServiceImpl implements IPdtOrderService {
         }
         restoreOldBillOfMaterials(foundProductionOrder);
         pdtOrderReposetory.delete(foundProductionOrder);
+    }
+
+    @Override
+    public void cancel(Long id){
+        ProductionOrder order = pdtOrderReposetory.findById(id).orElseThrow();
+
+        if(order.getStatus() == ProductionOrderStatus.TERMINE ||
+                order.getStatus() == ProductionOrderStatus.EN_PRODUCTION){
+            throw new IllegalStateException("Cannot cancel a production order that has already started");
+        }
+
+        restoreOldBillOfMaterials(order);
+        order.setStatus(ProductionOrderStatus.BLOQUE);
+        pdtOrderReposetory.save(order);
     }
 
 

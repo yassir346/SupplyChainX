@@ -11,6 +11,8 @@ import supplychainx.springboot.production.dto.ProductRequestDto;
 import supplychainx.springboot.production.dto.ProductResponseDto;
 import supplychainx.springboot.production.service.IPdtOrderService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/production_order")
 @AllArgsConstructor
@@ -30,7 +32,25 @@ public class PdtOrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PdtOrderResponse> get(@PathVariable Long id){
+        return ResponseEntity.ok(pdtOrderService.findById(id));
+    }
 
+    @GetMapping("/")
+    public ResponseEntity<List<PdtOrderResponse>> getAll(){
+        return ResponseEntity.ok(pdtOrderService.findAllProductionOrders());
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        pdtOrderService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<Void> cancel(@PathVariable Long id){
+        pdtOrderService.cancel(id);
+        return ResponseEntity.noContent().build();
+    }
 }
