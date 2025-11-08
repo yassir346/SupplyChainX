@@ -1,20 +1,25 @@
-package supplychainx.springboot.common.model;
+package supplychainx.springboot.common.User;
 
 import jakarta.persistence.*;
 import lombok.*;
 import supplychainx.springboot.common.enums.Role;
 
-@Data
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
     private String lastName;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
     private String password;

@@ -21,6 +21,4 @@ public class Customer {
     private String City;
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
-
-
 }
