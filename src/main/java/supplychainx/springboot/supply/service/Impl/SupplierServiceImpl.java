@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 @Service
 @AllArgsConstructor
-public class SupplierServiceImpl implements ISupplierService {
+public class  SupplierServiceImpl implements ISupplierService {
     ISupplierRepository supplierRepository;
     IRawMaterialRepository rawMaterialRepository;
 

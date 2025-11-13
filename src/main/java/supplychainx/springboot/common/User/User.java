@@ -11,10 +11,11 @@ import supplychainx.springboot.common.enums.Role;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)

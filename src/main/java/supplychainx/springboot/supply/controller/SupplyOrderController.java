@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import supplychainx.springboot.common.enums.Role;
+import supplychainx.springboot.security.SecuredAction;
 import supplychainx.springboot.supply.dto.SupplyOrderRequestDTO;
 import supplychainx.springboot.supply.dto.SupplyOrderResponseDTO;
 import supplychainx.springboot.supply.model.SupplyOrder;
@@ -18,6 +20,7 @@ public class SupplyOrderController {
     private ISupplyOrderService supplyOrderService;
 
     @PostMapping("/add")
+    @SecuredAction(roles = {Role.RESPONSABLE_ACHATS})
     public ResponseEntity<SupplyOrderResponseDTO> create(@RequestBody SupplyOrderRequestDTO supplyOrderRequest){
         SupplyOrder createdSupplyOrder = supplyOrderService.save(supplyOrderRequest);
 
@@ -25,6 +28,7 @@ public class SupplyOrderController {
     }
 
     @PutMapping("/update/{id}")
+    @SecuredAction(roles = {Role.RESPONSABLE_ACHATS})
     public ResponseEntity<SupplyOrderResponseDTO> update(@RequestBody SupplyOrderRequestDTO supplyOrderRequest, @PathVariable Long id){
         SupplyOrder updatedSupplyOrder = supplyOrderService.update(id, supplyOrderRequest);
         return ResponseEntity.ok(supplyOrderService.toResponse(updatedSupplyOrder));
@@ -36,6 +40,7 @@ public class SupplyOrderController {
     }
 
     @GetMapping("/")
+    @SecuredAction(roles = {Role.SUPERVISEUR_LOGISTIQUE})
     public ResponseEntity<List<SupplyOrder>> getAll(){
         return ResponseEntity.ok(supplyOrderService.getAllSupplyOrders());
     }

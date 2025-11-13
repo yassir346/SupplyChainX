@@ -24,8 +24,10 @@ public class UserService {
         }
 
         User user = userMapper.toEntity(request);
+        System.out.println("*************");
+        System.out.println(user);
         User saved = userRepository.save(user);
-
+        System.out.println("3333333333");
         return userMapper.toResponse(saved);
     }
 

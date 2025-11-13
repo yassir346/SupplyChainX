@@ -12,9 +12,13 @@ import supplychainx.springboot.delivery.repository.CustomerRepository;
 import supplychainx.springboot.delivery.repository.OrderRepository;
 import supplychainx.springboot.delivery.service.IOrderService;
 import supplychainx.springboot.delivery.service.OrderMapper;
+import supplychainx.springboot.production.dto.PdtOrderRequest;
 import supplychainx.springboot.production.model.Product;
+import supplychainx.springboot.production.model.ProductionOrder;
 import supplychainx.springboot.production.repository.ProductRepository;
+import supplychainx.springboot.production.service.IPdtOrderService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +29,9 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
+    private final IPdtOrderService pdtOrderService;
     private final OrderMapper orderMapper;
+
 
     @Override
     public OrderResponse save(OrderRequest orderRequest) {
@@ -47,7 +53,6 @@ public class OrderServiceImpl implements IOrderService {
         product.setStock(product.getStock() - orderRequest.getQuantity());
         productRepository.save(product);
         order.setProduct(product);
-
         Order savedOrder = orderRepository.save(order);
         return orderMapper.toResponse(savedOrder);
     }

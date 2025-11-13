@@ -30,8 +30,50 @@ services:
     networks:
       - supplychainx_network
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: supplychain-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/supplychainx_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - supplychainx_network
+    restart: unless-stopped
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: supplychain-sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_JDBC_URL: jdbc:mysql://localhost:3306/supplychainx_db
+      SONAR_JDBC_USERNAME: root
+      SONAR_JDBC_PASSWORD: root
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - supplychainx_network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
 volumes:
   mysql_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
 
 networks:
   supplychainx_network:
+    driver: bridge
