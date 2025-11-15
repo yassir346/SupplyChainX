@@ -99,5 +99,22 @@ public class UserServiceTest {
         assertEquals("Email already exists", exception.getMessage());
     }
 
+    @Test
+    void shouldUpdateUserRoleSuccessfully(){
+        User existingUser = new User(1L, "yassir", "mahir", "yas@yas.com", "pass", Role.CHEF_PRODUCTION);
 
+        User updatedUser = new User(1L, "yassir", "mahir", "yas@yas.com", "pass", Role.ADMIN);
+
+        UserResponse response= new UserResponse(1L, "yassir", "mahir", "yas@yas.com", Role.ADMIN);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(existingUser)).thenReturn(updatedUser);
+        when(userMapper.toResponse(updatedUser)).thenReturn(response);
+
+        UserResponse result = userService.updateUserRole(1L, Role.ADMIN);
+
+        assertEquals(Role.ADMIN, result.getRole());
+        verify(userRepository).findById(1L);
+        verify(userRepository).save(existingUser);
+    }
 }
