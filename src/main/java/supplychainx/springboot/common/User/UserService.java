@@ -45,4 +45,11 @@ public class UserService {
 
         return userMapper.toResponse(updated);
     }
+
+    public UserResponse getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        return userMapper.toResponse(user);
+    }
 }
