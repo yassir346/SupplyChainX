@@ -1,13 +1,13 @@
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: supplychainx_db
-      MYSQL_USER: springuser
-      MYSQL_PASSWORD: springpass
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
     ports:
       - "3306:3306"
     volumes:

@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import supplychainx.springboot.supply.model.Supplier;
 import supplychainx.springboot.supply.repository.ISupplierRepository;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,13 +41,24 @@ public class SupplierControllerTest {
         Supplier supplier = new Supplier();
         supplier.setName("name");
 
-        mockMvc.perform(post("/supplier")
+        mockMvc.perform(post("/supplier/add")
+
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(supplier)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("name"));
     }
 
+    @Test
+    void getSupplierById_shouldReturn200() throws Exception{
 
+        Supplier supplier = new Supplier();
+        supplier.setName("name");
+        supplierRepository.save(supplier);
 
+        mockMvc.perform(get("/supplier/" + supplier.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("name"));
+    }
 }
