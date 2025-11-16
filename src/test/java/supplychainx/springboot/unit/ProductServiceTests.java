@@ -1,4 +1,4 @@
-package supplychainx.springboot;
+package supplychainx.springboot.unit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

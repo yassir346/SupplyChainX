@@ -1,4 +1,4 @@
-package supplychainx.springboot;
+package supplychainx.springboot.unit;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 import supplychainx.springboot.common.User.*;
 import supplychainx.springboot.common.enums.Role;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

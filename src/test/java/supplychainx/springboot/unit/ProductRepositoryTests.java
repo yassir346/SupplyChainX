@@ -1,6 +1,5 @@
-package supplychainx.springboot;
+package supplychainx.springboot.unit;
 
-import jakarta.persistence.Id;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +7,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import supplychainx.springboot.production.model.Product;
 import supplychainx.springboot.production.repository.ProductRepository;
-
-import static org.mockito.Mockito.when;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
