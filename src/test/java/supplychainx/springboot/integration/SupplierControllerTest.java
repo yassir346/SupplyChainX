@@ -40,7 +40,6 @@ public class SupplierControllerTest {
     void createSupplier_shouldReturn200() throws Exception{
         Supplier supplier = new Supplier();
         supplier.setName("name");
-
         mockMvc.perform(post("/supplier/add")
 
                 .contentType(MediaType.APPLICATION_JSON)
