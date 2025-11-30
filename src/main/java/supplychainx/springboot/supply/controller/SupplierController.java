@@ -19,7 +19,7 @@ public class SupplierController {
     private final SupplierServiceImpl supplierService;
 
     @PostMapping ("/add")
-//    @SecuredAction(roles = {Role.GESTIONNAIRE_APPROVISIONNEMENT})
+    @SecuredAction(roles = {Role.GESTIONNAIRE_APPROVISIONNEMENT})
     public ResponseEntity<Supplier> create(@RequestBody SupplyRequestDTO supplierDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(supplierService.save(supplierDTO));
     }
