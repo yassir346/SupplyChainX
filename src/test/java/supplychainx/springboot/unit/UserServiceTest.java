@@ -110,7 +110,7 @@ public class UserServiceTest {
         when(userRepository.save(existingUser)).thenReturn(updatedUser);
         when(userMapper.toResponse(updatedUser)).thenReturn(response);
 
-        UserResponse result = userService.updateUserRole(1L, Role.ADMIN);
+        UserResponse result = userService.updateUserRole(1L, String.valueOf(Role.ADMIN));
 
         assertEquals(Role.ADMIN, result.getRole());
         verify(userRepository).findById(1L);

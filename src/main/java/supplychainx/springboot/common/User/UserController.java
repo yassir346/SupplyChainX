@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import supplychainx.springboot.common.enums.Role;
 import supplychainx.springboot.security.SecuredAction;
@@ -16,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private JwtService
+    private JwtService jwtService;
 
     @PostMapping
     @SecuredAction(roles = {Role.ADMIN})
@@ -28,7 +29,7 @@ public class UserController {
     @SecuredAction(roles = {Role.ADMIN})
     public ResponseEntity<UserResponse> updateUserRole(
             @PathVariable Long id,
-            @RequestParam Role newRole
+            @RequestParam String newRole
     ) {
         return ResponseEntity.ok(userService.updateUserRole(id, newRole));
     }
@@ -39,7 +40,9 @@ public class UserController {
                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
         );
         if(authentication.isAuthenticated()){
-            return
+            return jwtService.generateToken(authRequest.getEmail());
+        }else {
+            throw new UsernameNotFoundException("Invalid user request!");
         }
     }
 }
