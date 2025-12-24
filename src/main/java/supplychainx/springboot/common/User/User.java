@@ -34,7 +34,4 @@ public class User {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    public User(long id, String yassir, String mahir, String mail, String password, Role role) {
-    }
 }
