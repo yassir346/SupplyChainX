@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import supplychainx.springboot.common.enums.Role;
-import supplychainx.springboot.security.SecuredAction;
+//import supplychainx.springboot.security.SecuredAction;
 
 import java.nio.file.attribute.UserPrincipal;
 
@@ -20,7 +20,7 @@ public class UserController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest req) {
@@ -46,13 +46,11 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    @SecuredAction(roles = {Role.ADMIN})
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest request) {
         return ResponseEntity.ok(userService.createUser(request));
     }
 
     @PutMapping("/{id}/role")
-    @SecuredAction(roles = {Role.ADMIN})
     public ResponseEntity<UserResponse> updateUserRole(
             @PathVariable Long id,
             @RequestParam String newRole

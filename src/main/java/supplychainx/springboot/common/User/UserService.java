@@ -32,10 +32,8 @@ public class UserService implements UserDetailsService {
         }
 
         User user = userMapper.toEntity(request);
-        System.out.println("*************");
-        System.out.println(user);
+        user.setPassword(encoder.encode(user.getPassword()));
         User saved = userRepository.save(user);
-        System.out.println("3333333333");
         return userMapper.toResponse(saved);
     }
 
