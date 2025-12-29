@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS keycloak_db;
+CREATE DATABASE IF NOT EXISTS supplychainx_db;

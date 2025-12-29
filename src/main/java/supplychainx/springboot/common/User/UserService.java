@@ -3,24 +3,16 @@ package supplychainx.springboot.common.User;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import supplychainx.springboot.common.enums.Role;
-
-import java.util.Optional;
 
 @Service
 @Transactional
 @AllArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder encoder;
 
     public UserResponse createUser(UserRequest request) {
         if (userRepository.existsByEmail(request.getEmail().toLowerCase().trim())) {
@@ -32,11 +24,10 @@ public class UserService implements UserDetailsService {
         }
 
         User user = userMapper.toEntity(request);
-        user.setPassword(encoder.encode(user.getPassword()));
+        // Note: Password encoding is handled by Keycloak in this architecture
         User saved = userRepository.save(user);
         return userMapper.toResponse(saved);
     }
-
 
     public UserResponse updateUserRole(Long id, String newRole) {
         if (newRole == null) {
@@ -57,15 +48,5 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
         return userMapper.toResponse(user);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(username);
-
-        if(username.isEmpty()){
-            throw new UsernameNotFoundException("User not found with email" + username);
-        }
-        return new UserInfoDetails(user.get());
     }
 }
