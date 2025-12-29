@@ -60,7 +60,7 @@ public class UserServiceTest {
 
     @Test
     void ShouldCreateUserSuccessfully(){
-        UserRequest request = new UserRequest("admin@admin.com", "password", "yassir", "mahir", Role.ADMIN);
+        UserRequest request = new UserRequest("admin@admin.com", "password", "yassir", "mahir", "ADMIN");
 
         User entity = new User(0,    "yassir", "mahir", "admin@admin.com", "password", Role.ADMIN);
 
@@ -88,7 +88,7 @@ public class UserServiceTest {
 
     @Test
     void souldThrowExceptionWhenEmailAlreadyExists(){
-        UserRequest request = new UserRequest("admin@admin.com", "password", "yassir", "mahir", Role.ADMIN);
+        UserRequest request = new UserRequest("admin@admin.com", "password", "yassir", "mahir", "ADMIN");
 
         when(userRepository.existsByEmail("admin@admin.com")).thenReturn(true);
 
@@ -110,7 +110,7 @@ public class UserServiceTest {
         when(userRepository.save(existingUser)).thenReturn(updatedUser);
         when(userMapper.toResponse(updatedUser)).thenReturn(response);
 
-        UserResponse result = userService.updateUserRole(1L, Role.ADMIN);
+        UserResponse result = userService.updateUserRole(1L, String.valueOf(Role.ADMIN));
 
         assertEquals(Role.ADMIN, result.getRole());
         verify(userRepository).findById(1L);

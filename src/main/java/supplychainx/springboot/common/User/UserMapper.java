@@ -1,6 +1,7 @@
 package supplychainx.springboot.common.User;
 
 import org.springframework.stereotype.Service;
+import supplychainx.springboot.common.enums.Role;
 
 @Service
 public class UserMapper {
@@ -10,7 +11,7 @@ public class UserMapper {
         user.setPassword(dto.getPassword().trim());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
-        user.setRole(dto.getRole());
+        user.setRole(Role.valueOf(dto.getRole()));
         return user;
     }
 
