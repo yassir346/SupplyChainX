@@ -16,6 +16,7 @@ import java.nio.file.attribute.UserPrincipal;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class UserController {
 
     private final UserService userService;
@@ -35,7 +36,7 @@ public class UserController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
 //        User user = ((UserPrincipal) userDetails).getUser();
-        String accessToken = jwtService.generateToken(userDetails.getUsername());
+        String accessToken = jwtService.generateToken(userDetails);
 //        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
         return AuthResponse.builder()
@@ -64,7 +65,8 @@ public class UserController {
                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
         );
         if(authentication.isAuthenticated()){
-            return jwtService.generateToken(authRequest.getEmail());
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return jwtService.generateToken(userDetails);
         }else {
             throw new UsernameNotFoundException("Invalid user request!");
         }

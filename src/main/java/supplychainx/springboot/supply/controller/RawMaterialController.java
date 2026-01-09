@@ -43,7 +43,6 @@ public class RawMaterialController {
     }
 
     @DeleteMapping("/{id}")
-//    @SecuredAction(roles = {Role.GESTIONNAIRE_APPROVISIONNEMENT})
     public ResponseEntity<Void> delete(@PathVariable Long id){
         rawMaterialService.delete(id);
         return ResponseEntity.noContent().build();
